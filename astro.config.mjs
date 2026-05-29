@@ -9,19 +9,19 @@ export default defineConfig({
 	site: 'https://tasystemutveckling.se',
 	integrations: [
 		starlight({
-			title: 'Elmotorcykelprojektet',
-			// Sajten och allt innehåll är på svenska.
+			title: 'Electric Motorcycle Project',
+			// Sajtens innehåll är på engelska (CLAUDE.md/intern dok är på svenska).
 			defaultLocale: 'root',
 			locales: {
-				root: { label: 'Svenska', lang: 'sv' },
+				root: { label: 'English', lang: 'en' },
 			},
 			// TODO: peka mot rätt GitHub-repo när det är skapat.
 			// social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/<org>/mc-website' }],
 			plugins: [
 				starlightBlog({
-					title: 'Byggdagbok',
-					prefix: 'byggdagbok', // inlägg i src/content/docs/byggdagbok/, URL /byggdagbok
-					navigation: 'header-start', // bloggen är huvudinnehållet → prominent placering
+					title: 'Build Log',
+					prefix: 'blog', // inlägg i src/content/docs/blog/, URL /blog
+					navigation: 'none', // länkas i vänstermenyn (sidebar) i stället för headern
 					authors: {
 						tobias: { name: 'Tobias' },
 					},
@@ -29,24 +29,22 @@ export default defineConfig({
 				}),
 			],
 			sidebar: [
+				{ label: 'Overview', link: '/' },
+				{ label: 'Build Log', link: '/blog/' },
 				{
-					label: 'Inverter',
-					items: [{ label: 'Översikt', slug: 'inverter/oversikt' }],
-				},
-				{
-					label: 'Motor',
-					items: [{ label: 'Översikt', slug: 'motor/oversikt' }],
-				},
-				{
-					label: 'Batteri',
+					label: 'Documentation',
 					items: [
-						{ label: 'Översikt', slug: 'batteri/oversikt' },
-						{ label: 'Kopplingsbox', slug: 'batteri/kopplingsbox' },
+						{ label: 'Inverter', slug: 'inverter/overview' },
+						{ label: 'Motor', slug: 'motor/overview' },
+						{
+							label: 'Battery',
+							items: [
+								{ label: 'Overview', slug: 'battery/overview' },
+								{ label: 'Junction box', slug: 'battery/junction-box' },
+							],
+						},
+						{ label: 'Chassis', slug: 'chassis/frame' },
 					],
-				},
-				{
-					label: 'Chassi',
-					items: [{ label: 'Ram', slug: 'chassi/ram' }],
 				},
 			],
 		}),

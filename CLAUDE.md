@@ -23,7 +23,7 @@ Sajten ersätter på sikt den nuvarande WordPress-installationen på **tasystemu
 |---|---|---|
 | Ramverk | **Astro Starlight** (`@astrojs/starlight`) | Dokumentationstung sajt → docs-chrome (sidomeny, sök via Pagefind, TOC, dark mode) färdigt. Bygger på Astro, så egna komponenter/MDX/landningssida går att lägga till. |
 | Innehåll | **Markdown/MDX i `src/content/docs/`** | Versionshanterat, Claude kan skapa/redigera direkt. Ny sida = en `.md` + ev. en rad i sidebar. |
-| Språk | **Svenska** genomgående | Sajten och källmaterialet är på svenska. |
+| Språk | **Engelska** för sajtens innehåll | Publik sajt riktad mot en bredare publik. *Intern dok (denna CLAUDE.md) hålls på svenska.* Slugs är engelska (`overview`, `frame`, `blog` …). |
 | Hosting | **GitHub Pages** | Repot ligger på GitHub; inget tredjepartskonto behövs. |
 | CI/CD | **GitHub Actions** | Bygger Astro och publicerar till Pages vid push till `main`. |
 | Domän | **tasystemutveckling.se** (ersätter WordPress) | DNS kvar hos **one.com** (e-post m.m. opåverkat); apex pekas mot GitHub Pages via A-records + `CNAME`-fil vid cutover. |
@@ -66,42 +66,40 @@ Hembyggt kraftkort baserat på TI:s **TIDA-01540**, drivet av en **LAUNCHXL-F280
 
 Mekanik / ram, batteri, BMS, laddare. Lägg till dem här och i strukturen när de materialiseras.
 
-## Innehållsstruktur (förslag — justera när vi scaffoldar)
+## Innehållsstruktur
 
-Spegla projektets delsystem. Inverter är längst kommen, så börja där.
+Startsidan är en **projektsammanfattning med bilder** (som dagens WordPress-startsida). Navigeringen till *Build Log* och *Documentation* sker via **vänstermenyn** (Starlights `sidebar`, satt i `astro.config.mjs`). Delsystemssidorna speglar projektets delar; inverter är längst kommen.
 
 ```
 src/content/docs/
-├── index.mdx              # landningssida: vad projektet är, översikt, status
-├── inverter/
-│   ├── oversikt.md        # vad inverter gör, arkitektur
-│   ├── kraftkort.md       # TIDA-01540-baserat kraftkort, F280025C
-│   └── firmware.md        # FOC-mjukvaran, byggnivåer, destillerat från firmware-repo
-├── motor/
-│   └── oversikt.md        # PMSM, 8-pol/48-spår
-├── batteri/               # 48s4p LiFePO4, ~154 V
-├── chassi/                # stålrörs-trellis
-└── byggdagbok/            # blogg/devlog (se nedan)
+├── index.mdx                 # startsida: projektsammanfattning + bilder + länkar
+├── inverter/overview.md      # (+ senare: power-board.md, firmware.md)
+├── motor/overview.md         # PMSM, 8-pole/48-slot
+├── battery/
+│   ├── overview.md           # 48s4p LiFePO₄, 154 V
+│   └── junction-box.md       # huvudkontaktor, säkring, förladdning
+├── chassis/frame.md          # stålrörs-trellis
+└── blog/                     # Build Log (se nedan)
+src/assets/                   # bilder (overview/motor/inverter/battery/junction-box/frame.png)
 ```
 
-Sidofältets ordning/gruppering styrs i `astro.config.mjs` (Starlights `sidebar`).
+Bilderna laddades ner från Drive-mappen `bilder/` (+ kopplingsbox från WordPress) via `gws drive files get --params '{"fileId":"…","alt":"media"}' -o …`, och optimeras till WebP av Astro vid build.
 
-### Byggdagbok (blogg)
+### Build Log (blogg)
 
-Sajten har en blogg via pluginet **`starlight-blog`** (`plugins:` i `astro.config.mjs`), monterad på `/byggdagbok`. **Bloggen är sajtens huvudinnehåll** — startsidan (`index.mdx`) leder med de senaste inläggen (via `src/components/RecentPosts.astro`) och blogglänken ligger `header-start`. Dokumentationen är sekundär: en "fördjupning" för den som vill gräva djupare. Uppdelningen:
+Sajten har en blogg via pluginet **`starlight-blog`** (`plugins:` i `astro.config.mjs`), monterad på `/blog` med titeln **Build Log**. Plugin-navigeringen är `'none'` — bloggen länkas i vänstermenyn i stället för i headern. Uppdelningen:
 
-- **Byggdagbok** (primärt) = kronologin: vad som hände, testades och gick fel. Knyter an till *Dagbok* i Drive och `bringup_log.md` i firmware-repot.
-- **Dokumentation** (fördjupning) = referensmaterialet: hur delsystemen *är* konstruerade.
+- **Build Log** = kronologin: vad som hände, testades och gick fel. Knyter an till *Dagbok* i Drive och `bringup_log.md` i firmware-repot.
+- **Documentation** (fördjupning) = referensmaterialet: hur delsystemen *är* konstruerade.
 
-Nytt inlägg = en `.md` i `src/content/docs/byggdagbok/` med frontmatter `title`, `date`, `authors: tobias`, `tags`, `excerpt`. Lista, taggsidor, författarsidor och RSS genereras automatiskt — ingen registrering behövs. Författare definieras i plugin-optionen `authors`.
+Nytt inlägg = en `.md` i `src/content/docs/blog/` med frontmatter `title`, `date`, `authors: tobias`, `tags`, `excerpt`. Lista, taggsidor, författarsidor och RSS genereras automatiskt — ingen registrering behövs. Författare definieras i plugin-optionen `authors`.
 
 ## Konventioner och kvalitetskrav
 
-- **Språk:** svenska genomgående, korrekt och naturlig prosa, inga översättningsanglicismer.
-- **Tilltal:** "du" (singular).
-- **Publik publik, lagom nivå** — sajten riktar sig till tekniskt intresserade läsare, inte bara projektägaren. Förklara förkortningar (FOC, PMSM, BMS …) första gången de används.
+- **Språk:** engelska genomgående på sajten, korrekt och naturlig prosa.
+- **Publik, lagom nivå** — sajten riktar sig till tekniskt intresserade läsare, inte bara projektägaren. Förklara förkortningar (FOC, PMSM, BMS …) första gången de används.
 - **Råa anteckningar destilleras** — kopiera inte Drive-anteckningar rakt av; skriv om till sammanhängande publik text.
-- **Bilder** läggs i `public/` (eller `src/assets/` för optimering) och hämtas från Drive-mappen `bilder/` vid behov.
+- **Bilder** läggs i `src/assets/` (optimeras av Astro, importeras i MDX via `astro:assets`) och hämtas från Drive-mappen `bilder/` vid behov.
 - **Tillgänglighet & prestanda:** semantisk HTML, alt-texter, vettiga kontraster. Starlight ger en bra baslinje — bryt den inte i onödan.
 - **Ingen client-side JS** om det inte behövs — håll det statiskt.
 
@@ -122,15 +120,16 @@ Push till `main` → GitHub Actions bygger och publicerar till GitHub Pages. Wor
 
 Grunden är scaffoldad och bygger rent. Att göra (markera klart efter hand):
 
-- [x] Scaffolda Astro Starlight (svenska, `site=tasystemutveckling.se`)
-- [x] Initiera lokalt git-repo (första commit gjord)
-- [x] Landningssida (`index.mdx`) + grundläggande delsystemssidor
-- [x] Migrera innehåll från nuvarande WordPress (Home — Inverter-sidan var tom)
-- [x] Byggdagbok (blogg) via `starlight-blog` + första inlägg
+- [x] Scaffolda Astro Starlight (`site=tasystemutveckling.se`)
+- [x] Initiera lokalt git-repo
+- [x] Engelsk startsida = projektsammanfattning med bilder (från Drive `bilder/` + WordPress)
+- [x] Delsystemssidor (inverter, motor, battery, chassis) på engelska
+- [x] Build Log (blogg) via `starlight-blog` + första inlägg
+- [x] Vänstermeny: Overview / Build Log / Documentation
 - [ ] Skapa GitHub-repo och pusha
 - [ ] GitHub Actions-workflow för Pages-deploy
 - [ ] Designval: visuellt språk, ev. delning av tokens med `../flowi_website`
-- [ ] Inverter: fördjupa med kraftkort + firmware (destillera från Drive + firmware-repo)
+- [ ] Inverter: fördjupa med power-board + firmware (destillera från Drive + firmware-repo)
 - [ ] Fyll på övriga delsystem från Drive (`projektdokumentation/`, `utveckling/`)
 - [ ] DNS-cutover-plan: peka tasystemutveckling.se från one.com till GitHub Pages
 

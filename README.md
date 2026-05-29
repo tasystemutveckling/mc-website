@@ -16,19 +16,20 @@ npm run preview    # förhandsgranska byggd output
 ## Struktur
 
 ```
-src/content/docs/        Innehåll i Markdown/MDX (en fil = en sida)
-├── index.mdx            Landningssida
+src/content/docs/        Innehåll i Markdown/MDX (en fil = en sida), på engelska
+├── index.mdx            Startsida: projektsammanfattning med bilder
 ├── inverter/
 ├── motor/
-├── batteri/
-├── chassi/
-└── byggdagbok/          Blogg/devlog (starlight-blog), URL /byggdagbok
-astro.config.mjs         Titel, språk, sidomeny, blogg-plugin
+├── battery/
+├── chassis/
+└── blog/                Build Log (starlight-blog), URL /blog
+src/assets/              Bilder (importeras i MDX, optimeras till WebP)
+astro.config.mjs         Titel, språk, vänstermeny (sidebar), blogg-plugin
 ```
 
 Ny **doc-sida** = skapa en `.md`/`.mdx` under `src/content/docs/` och lägg ev. till den i `sidebar` i `astro.config.mjs`.
 
-Nytt **blogginlägg** = skapa en `.md` under `src/content/docs/byggdagbok/` med frontmatter (`title`, `date`, `authors`, `tags`, `excerpt`). Dyker upp automatiskt i listan och RSS.
+Nytt **blogginlägg** = skapa en `.md` under `src/content/docs/blog/` med frontmatter (`title`, `date`, `authors`, `tags`, `excerpt`). Dyker upp automatiskt i listan och RSS.
 
 ## Deploy
 

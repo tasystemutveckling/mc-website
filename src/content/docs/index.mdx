@@ -1,43 +1,48 @@
 ---
-title: Elmotorcykelprojektet
-description: Jag bygger en elmotorcykel från grunden och dokumenterar resan – följ arbetet i byggdagboken.
-template: splash
-hero:
-  tagline: Jag bygger en elmotorcykel från grunden. Följ arbetet i byggdagboken – och gräv djupare i dokumentationen när du vill veta hur det faktiskt är konstruerat.
-  actions:
-    - text: Till byggdagboken
-      link: /byggdagbok/
-      icon: right-arrow
-    - text: Utforska dokumentationen
-      link: /inverter/oversikt/
-      icon: open-book
-      variant: minimal
+title: Electric motorcycle project
+description: Designing and building an electric motorcycle from scratch — and documenting the journey.
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
-import RecentPosts from '../../components/RecentPosts.astro';
+import { Image } from 'astro:assets';
+import overview from '../../assets/overview.png';
+import motorImg from '../../assets/motor.png';
+import inverterImg from '../../assets/inverter.png';
+import batteryImg from '../../assets/battery.png';
+import junctionBoxImg from '../../assets/junction-box.png';
+import frameImg from '../../assets/frame.png';
 
-## Senaste från byggdagboken
+This project is about designing and building an **electric motorcycle from scratch**, and sharing the knowledge gained along the way. The focus is the complete drivetrain: a three-phase permanent magnet synchronous motor, the power electronics that drive it, and the battery that powers it all.
 
-<RecentPosts limit={5} />
+<Image src={overview} alt="Overview render of the electric motorcycle" />
 
-[Alla inlägg i byggdagboken →](/byggdagbok/)
+Follow the work in the [build log](/blog/), or dig into the [documentation](/inverter/overview/) to see how each subsystem is designed.
 
-## Fördjupning
+## Motor
 
-Vill du veta mer om hur ett visst delsystem är konstruerat? Referensdokumentationen går på djupet, delsystem för delsystem.
+<Image src={motorImg} alt="The permanent magnet synchronous motor" />
 
-<CardGrid>
-	<Card title="Inverter" icon="rocket">
-		Kraftelektroniken som omvandlar batteriets likström till växelström i motorn – systemets "hjärna". [Läs mer](/inverter/oversikt/)
-	</Card>
-	<Card title="Motor" icon="setting">
-		En borstlös permanentmagnet-synkronmotor (PMSM) med 8 poler och 48 spår. [Läs mer](/motor/oversikt/)
-	</Card>
-	<Card title="Batteri" icon="approve-check">
-		96 litiumjärnfosfat-celler i 48s4p-konfiguration, 154 V nominellt. [Läs mer](/batteri/oversikt/)
-	</Card>
-	<Card title="Chassi" icon="document">
-		En svetsad stålrörsram av fackverkstyp. [Läs mer](/chassi/ram/)
-	</Card>
-</CardGrid>
+The central component is a **brushless permanent magnet synchronous motor (PMSM)** in an 8-pole, 48-slot configuration. The rotor is 108 mm wide and 100 mm in diameter, fitted with neodymium magnets. The housing is aluminium with cooling fins, and the magnetic core is built from 29-gauge electrical steel laminations.
+
+## Inverter
+
+<Image src={inverterImg} alt="The inverter" />
+
+The inverter is the **brain** of the system. It converts the battery's direct current into sinusoidal alternating current in the motor windings, controlling amplitude, frequency and phase relative to the rotor position so that the stator's rotating magnetic field interacts with the rotor's permanent magnets.
+
+## Battery
+
+<Image src={batteryImg} alt="The battery pack" />
+
+Energy is stored in **96 lithium iron phosphate (LiFePO₄) cells** in the 33140 form factor (33 mm diameter, 140 mm height). The pack is wired **48s4p** — 48 in series, 4 in parallel — for **154 V nominal**. Each cell can discharge 75 A, giving a maximum pack output of 300 A.
+
+## Junction box
+
+<Image src={junctionBoxImg} alt="The junction box" />
+
+The junction box sits between the battery and the inverter and houses the protective components: the main contactor, the fuse and the pre-charge resistor.
+
+## Frame
+
+<Image src={frameImg} alt="The steel trellis frame" />
+
+The chassis is a **welded steel-tube trellis frame**, chosen for its simplicity to build and its cost-effectiveness in small-scale manufacturing.
