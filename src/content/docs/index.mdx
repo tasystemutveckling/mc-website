@@ -1,0 +1,32 @@
+---
+title: Elmotorcykelprojektet
+description: Att konstruera och bygga en elmotorcykel från grunden – och dela kunskapen längs vägen.
+template: splash
+hero:
+  tagline: Att konstruera och bygga en elmotorcykel från grunden – och dela kunskapen längs vägen.
+  actions:
+    - text: Läs om invertern
+      link: /inverter/oversikt/
+      icon: right-arrow
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Om projektet
+
+Projektet går ut på att konstruera och bygga en **elmotorcykel** från grunden. Fokus ligger på hela drivlinan: en trefasig permanentmagnet-synkronmotor, kraftelektronik för effektomvandling och energilagring. Den här sajten dokumenterar arbetet och kunskapen som tas fram längs vägen.
+
+<CardGrid stagger>
+	<Card title="Inverter" icon="rocket">
+		Kraftelektroniken som omvandlar batteriets likström till växelström i motorn – systemets "hjärna". [Läs mer](/inverter/oversikt/)
+	</Card>
+	<Card title="Motor" icon="setting">
+		En borstlös permanentmagnet-synkronmotor (PMSM) med 8 poler och 48 spår. [Läs mer](/motor/oversikt/)
+	</Card>
+	<Card title="Batteri" icon="approve-check">
+		96 litiumjärnfosfat-celler i 48s4p-konfiguration, 154 V nominellt. [Läs mer](/batteri/oversikt/)
+	</Card>
+	<Card title="Chassi" icon="document">
+		En svetsad stålrörsram av fackverkstyp. [Läs mer](/chassi/ram/)
+	</Card>
+</CardGrid>
