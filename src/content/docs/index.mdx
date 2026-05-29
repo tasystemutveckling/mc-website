@@ -1,22 +1,33 @@
 ---
 title: Elmotorcykelprojektet
-description: Att konstruera och bygga en elmotorcykel från grunden – och dela kunskapen längs vägen.
+description: Jag bygger en elmotorcykel från grunden och dokumenterar resan – följ arbetet i byggdagboken.
 template: splash
 hero:
-  tagline: Att konstruera och bygga en elmotorcykel från grunden – och dela kunskapen längs vägen.
+  tagline: Jag bygger en elmotorcykel från grunden. Följ arbetet i byggdagboken – och gräv djupare i dokumentationen när du vill veta hur det faktiskt är konstruerat.
   actions:
-    - text: Läs om invertern
-      link: /inverter/oversikt/
+    - text: Till byggdagboken
+      link: /byggdagbok/
       icon: right-arrow
+    - text: Utforska dokumentationen
+      link: /inverter/oversikt/
+      icon: open-book
+      variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
+import RecentPosts from '../../components/RecentPosts.astro';
 
-## Om projektet
+## Senaste från byggdagboken
 
-Projektet går ut på att konstruera och bygga en **elmotorcykel** från grunden. Fokus ligger på hela drivlinan: en trefasig permanentmagnet-synkronmotor, kraftelektronik för effektomvandling och energilagring. Den här sajten dokumenterar arbetet och kunskapen som tas fram längs vägen.
+<RecentPosts limit={5} />
 
-<CardGrid stagger>
+[Alla inlägg i byggdagboken →](/byggdagbok/)
+
+## Fördjupning
+
+Vill du veta mer om hur ett visst delsystem är konstruerat? Referensdokumentationen går på djupet, delsystem för delsystem.
+
+<CardGrid>
 	<Card title="Inverter" icon="rocket">
 		Kraftelektroniken som omvandlar batteriets likström till växelström i motorn – systemets "hjärna". [Läs mer](/inverter/oversikt/)
 	</Card>

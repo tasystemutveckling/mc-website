@@ -21,6 +21,7 @@ export default defineConfig({
 				starlightBlog({
 					title: 'Byggdagbok',
 					prefix: 'byggdagbok', // inlägg i src/content/docs/byggdagbok/, URL /byggdagbok
+					navigation: 'header-start', // bloggen är huvudinnehållet → prominent placering
 					authors: {
 						tobias: { name: 'Tobias' },
 					},

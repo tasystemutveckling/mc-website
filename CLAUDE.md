@@ -88,10 +88,10 @@ Sidofältets ordning/gruppering styrs i `astro.config.mjs` (Starlights `sidebar`
 
 ### Byggdagbok (blogg)
 
-Sajten har en blogg via pluginet **`starlight-blog`** (`plugins:` i `astro.config.mjs`), monterad på `/byggdagbok`. Uppdelningen:
+Sajten har en blogg via pluginet **`starlight-blog`** (`plugins:` i `astro.config.mjs`), monterad på `/byggdagbok`. **Bloggen är sajtens huvudinnehåll** — startsidan (`index.mdx`) leder med de senaste inläggen (via `src/components/RecentPosts.astro`) och blogglänken ligger `header-start`. Dokumentationen är sekundär: en "fördjupning" för den som vill gräva djupare. Uppdelningen:
 
-- **Dokumentation** (delsystemssidorna) = referensmaterialet: hur saker *är* konstruerade.
-- **Byggdagbok** = kronologin: vad som hände, testades och gick fel. Knyter an till *Dagbok* i Drive och `bringup_log.md` i firmware-repot.
+- **Byggdagbok** (primärt) = kronologin: vad som hände, testades och gick fel. Knyter an till *Dagbok* i Drive och `bringup_log.md` i firmware-repot.
+- **Dokumentation** (fördjupning) = referensmaterialet: hur delsystemen *är* konstruerade.
 
 Nytt inlägg = en `.md` i `src/content/docs/byggdagbok/` med frontmatter `title`, `date`, `authors: tobias`, `tags`, `excerpt`. Lista, taggsidor, författarsidor och RSS genereras automatiskt — ingen registrering behövs. Författare definieras i plugin-optionen `authors`.
 
