@@ -111,16 +111,17 @@ Push till `main` → GitHub Actions bygger och publicerar till GitHub Pages. Wor
 
 ## Status / vad som återstår
 
-Det här repot är i scaffold-läge. Att göra (markera klart efter hand):
+Grunden är scaffoldad och bygger rent. Att göra (markera klart efter hand):
 
-- [ ] Initiera git-repo och pusha till GitHub
-- [ ] Scaffolda Astro Starlight (`npm create astro@latest -- --template starlight`)
-- [ ] Designval: visuellt språk, ev. delning av tokens med `../flowi_website`
-- [ ] Landningssida (`index.mdx`) — projektöversikt + delsystemsstatus
-- [ ] Inverter-sektionen (översikt, kraftkort, firmware) — destillerad från Drive + firmware-repo
-- [ ] Motor-sektionen
+- [x] Scaffolda Astro Starlight (svenska, `site=tasystemutveckling.se`)
+- [x] Initiera lokalt git-repo (första commit gjord)
+- [x] Landningssida (`index.mdx`) + grundläggande delsystemssidor
+- [x] Migrera innehåll från nuvarande WordPress (Home — Inverter-sidan var tom)
+- [ ] Skapa GitHub-repo och pusha
 - [ ] GitHub Actions-workflow för Pages-deploy
-- [ ] Migrera relevant innehåll från nuvarande WordPress (Home + Inverter)
+- [ ] Designval: visuellt språk, ev. delning av tokens med `../flowi_website`
+- [ ] Inverter: fördjupa med kraftkort + firmware (destillera från Drive + firmware-repo)
+- [ ] Fyll på övriga delsystem från Drive (`projektdokumentation/`, `utveckling/`)
 - [ ] DNS-cutover-plan: peka tasystemutveckling.se från one.com till GitHub Pages
 
 ## Innan du gissar — fråga användaren
