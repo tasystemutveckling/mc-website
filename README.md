@@ -21,11 +21,14 @@ src/content/docs/        Innehåll i Markdown/MDX (en fil = en sida)
 ├── inverter/
 ├── motor/
 ├── batteri/
-└── chassi/
-astro.config.mjs         Titel, språk, sidomeny (sidebar)
+├── chassi/
+└── byggdagbok/          Blogg/devlog (starlight-blog), URL /byggdagbok
+astro.config.mjs         Titel, språk, sidomeny, blogg-plugin
 ```
 
-Ny sida = skapa en `.md`/`.mdx` under `src/content/docs/` och lägg ev. till den i `sidebar` i `astro.config.mjs`.
+Ny **doc-sida** = skapa en `.md`/`.mdx` under `src/content/docs/` och lägg ev. till den i `sidebar` i `astro.config.mjs`.
+
+Nytt **blogginlägg** = skapa en `.md` under `src/content/docs/byggdagbok/` med frontmatter (`title`, `date`, `authors`, `tags`, `excerpt`). Dyker upp automatiskt i listan och RSS.
 
 ## Deploy
 

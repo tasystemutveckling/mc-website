@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightBlog from 'starlight-blog';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,6 +17,16 @@ export default defineConfig({
 			},
 			// TODO: peka mot rätt GitHub-repo när det är skapat.
 			// social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/<org>/mc-website' }],
+			plugins: [
+				starlightBlog({
+					title: 'Byggdagbok',
+					prefix: 'byggdagbok', // inlägg i src/content/docs/byggdagbok/, URL /byggdagbok
+					authors: {
+						tobias: { name: 'Tobias' },
+					},
+					metrics: { readingTime: true },
+				}),
+			],
 			sidebar: [
 				{
 					label: 'Inverter',

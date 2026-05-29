@@ -79,12 +79,21 @@ src/content/docs/
 │   └── firmware.md        # FOC-mjukvaran, byggnivåer, destillerat från firmware-repo
 ├── motor/
 │   └── oversikt.md        # PMSM, 8-pol/48-spår
-├── batteri/               # (framtid) 48s4p LiFePO4, ~154 V
-├── bms/                   # (framtid)
-└── ram/                   # (framtid) stålrörs-trellis
+├── batteri/               # 48s4p LiFePO4, ~154 V
+├── chassi/                # stålrörs-trellis
+└── byggdagbok/            # blogg/devlog (se nedan)
 ```
 
 Sidofältets ordning/gruppering styrs i `astro.config.mjs` (Starlights `sidebar`).
+
+### Byggdagbok (blogg)
+
+Sajten har en blogg via pluginet **`starlight-blog`** (`plugins:` i `astro.config.mjs`), monterad på `/byggdagbok`. Uppdelningen:
+
+- **Dokumentation** (delsystemssidorna) = referensmaterialet: hur saker *är* konstruerade.
+- **Byggdagbok** = kronologin: vad som hände, testades och gick fel. Knyter an till *Dagbok* i Drive och `bringup_log.md` i firmware-repot.
+
+Nytt inlägg = en `.md` i `src/content/docs/byggdagbok/` med frontmatter `title`, `date`, `authors: tobias`, `tags`, `excerpt`. Lista, taggsidor, författarsidor och RSS genereras automatiskt — ingen registrering behövs. Författare definieras i plugin-optionen `authors`.
 
 ## Konventioner och kvalitetskrav
 
@@ -117,6 +126,7 @@ Grunden är scaffoldad och bygger rent. Att göra (markera klart efter hand):
 - [x] Initiera lokalt git-repo (första commit gjord)
 - [x] Landningssida (`index.mdx`) + grundläggande delsystemssidor
 - [x] Migrera innehåll från nuvarande WordPress (Home — Inverter-sidan var tom)
+- [x] Byggdagbok (blogg) via `starlight-blog` + första inlägg
 - [ ] Skapa GitHub-repo och pusha
 - [ ] GitHub Actions-workflow för Pages-deploy
 - [ ] Designval: visuellt språk, ev. delning av tokens med `../flowi_website`
