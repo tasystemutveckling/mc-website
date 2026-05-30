@@ -1,0 +1,41 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Bygg och deploya vid push till main (GitOps).
+  push:
+    branches: [main]
+  # Tillåt manuell körning från Actions-fliken.
+  workflow_dispatch:
+
+# Behörigheter som GITHUB_TOKEN behöver för att deploya till Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Tillåt en pågående deploy i taget; avbryt inte en deploy som redan kör.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install, build and upload Astro site
+        uses: withastro/action@v3
+        with:
+          node-version: 22
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

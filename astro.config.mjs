@@ -8,7 +8,11 @@ import rehypeKatex from 'rehype-katex';
 // https://astro.build/config
 export default defineConfig({
 	// Ersätter WordPress-sajten på sikt. DNS hos one.com, hostas på GitHub Pages.
-	site: 'https://tasystemutveckling.se',
+	// Före DNS-cutover serveras sajten som projekt-sajt under /mc-website/.
+	// Vid cutover: byt site till 'https://tasystemutveckling.se', ta bort base
+	// och lägg till public/CNAME (se CLAUDE.md, DNS-cutover-punkten).
+	site: 'https://tasystemutveckling.github.io',
+	base: '/mc-website',
 	// LaTeX-matematik: $…$ (inline) och $$…$$ (block), renderas med KaTeX.
 	markdown: {
 		remarkPlugins: [remarkMath],
