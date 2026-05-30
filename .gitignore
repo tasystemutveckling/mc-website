@@ -25,3 +25,5 @@ _export.*
 _validate.*
 _doc.json
 _req.json
+
+temp/

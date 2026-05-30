@@ -7,10 +7,10 @@ import rehypeKatex from 'rehype-katex';
 
 // https://astro.build/config
 export default defineConfig({
-	// Hostas på GitHub Pages, serveras på subdomänen mc.tasystemutveckling.se
-	// (custom-domän via public/CNAME). DNS hos one.com: CNAME mc -> tasystemutveckling.github.io.
-	// Apex tasystemutveckling.se (WordPress, e-post) rörs inte — bara 'mc'-subdomänen pekas mot Pages.
-	site: 'https://mc.tasystemutveckling.se',
+	// Hostas på GitHub Pages, serveras på apex tasystemutveckling.se (custom-domän via public/CNAME).
+	// DNS hos one.com: fyra A + fyra AAAA på apex mot GitHub Pages, samt CNAME www -> tasystemutveckling.github.io.
+	// E-postens MX-poster lämnas orörda. Gamla WordPress ligger kvar på one.com men nås inte via domänen.
+	site: 'https://tasystemutveckling.se',
 	// LaTeX-matematik: $…$ (inline) och $$…$$ (block), renderas med KaTeX.
 	markdown: {
 		remarkPlugins: [remarkMath],
