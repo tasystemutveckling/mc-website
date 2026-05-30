@@ -19,3 +19,9 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# temp-filer från /validate-doc och /export-doc (export, doc-dump, batchUpdate-request)
+_export.*
+_validate.*
+_doc.json
+_req.json

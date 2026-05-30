@@ -2,14 +2,23 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightBlog from 'starlight-blog';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 // https://astro.build/config
 export default defineConfig({
 	// Ersätter WordPress-sajten på sikt. DNS hos one.com, hostas på GitHub Pages.
 	site: 'https://tasystemutveckling.se',
+	// LaTeX-matematik: $…$ (inline) och $$…$$ (block), renderas med KaTeX.
+	markdown: {
+		remarkPlugins: [remarkMath],
+		rehypePlugins: [rehypeKatex],
+	},
 	integrations: [
 		starlight({
 			title: 'Electric Motorcycle Project',
+			// KaTeX-stilmall för matematik (npm-modulspecifierare).
+			customCss: ['katex/dist/katex.min.css'],
 			// Sajtens innehåll är på engelska (CLAUDE.md/intern dok är på svenska).
 			defaultLocale: 'root',
 			locales: {
@@ -34,7 +43,13 @@ export default defineConfig({
 				{
 					label: 'Documentation',
 					items: [
-						{ label: 'Inverter', slug: 'inverter/overview' },
+						{
+							label: 'Inverter',
+							items: [
+								{ label: 'Overview', slug: 'inverter/overview' },
+								{ label: 'Design', slug: 'inverter/design' },
+							],
+						},
 						{ label: 'Motor', slug: 'motor/overview' },
 						{
 							label: 'Battery',
