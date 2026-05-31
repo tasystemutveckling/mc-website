@@ -23,7 +23,7 @@ Argument: första = dokumentnamn eller ID; andra (valfritt) = `page` (default) e
 
 4. **Publicera** (endast efter `OK`) — enligt `CLAUDE.md`-arbetsflödet:
    - Exportera även `text/html` (och `application/pdf` om dokumentet har inline-ritningar — se `[[inline-drawings-dont-export]]`).
-   - **Transkribera troget** till Markdown + frontmatter (docs: `title`, `description`; blogg: `title`, `date`, `authors: tobias`, `tags`, `excerpt`). Formulera inte om.
+   - **Transkribera troget** till Markdown + frontmatter (docs: `title`, `description`; blogg: `title`, `date`, `authors: tobias`, `tags`, `excerpt`). **Rena språkfel** (stavning, grammatik, interpunktion) rättar du på vägen; **större omskrivningar** gör du inte (se don't-rewrite-regeln).
    - **Bilder:** extrahera base64 ur exporten till `src/assets/<sida>-N.png`, relativa referenser.
    - **Formler:** läs HTML-exportens formelbilder visuellt → LaTeX (KaTeX). Gissa aldrig ur markdownen.
    - **Inline-ritningar:** rendera ur PDF-exporten (PyMuPDF, sid-yta i 3× på vit botten).
@@ -32,6 +32,6 @@ Argument: första = dokumentnamn eller ID; andra (valfritt) = `page` (default) e
 
 5. **Bygg & verifiera:** `npm run build`. Åtgärda ev. fel.
 
-6. **Tala om vad som ska committas** (pusha INTE): lista exakt — den nya/ändrade `.md`-filen, ev. `src/assets/*`, `export-state.json`, och `astro.config.mjs` om sidebar ändrades.
+6. **Rapportera & lista commit** (pusha INTE): (a) **rapportera ev. mindre språkfixar** du gjort i texten, så de kan speglas till Google-dokumentet; (b) lista exakt vad som ska committas — den nya/ändrade `.md`-filen, ev. `src/assets/*`, `export-state.json`, och `astro.config.mjs` om sidebar ändrades.
 
 7. **Städa** temp-filer: `rm -f _export.md _export.html _export.pdf _doc.json` m.fl.

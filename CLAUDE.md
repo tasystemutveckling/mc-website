@@ -102,7 +102,7 @@ Det normala sättet att lägga upp innehåll: användaren skriver i **Google Doc
 
 **Claude gör:**
 1. Exporterar: `gws drive files export --params '{"fileId":"…","mimeType":"text/markdown"}' -o <temp i projektet>` (obs: `-o` måste ligga *inom* projektkatalogen — verktyget vägrar sökvägar utanför).
-2. **Transkriberar texten troget** till ren Markdown och lägger på frontmatter (docs: `title`, `description`; blogg: `title`, `date`, `authors: tobias`, `tags`, `excerpt`). Se regeln nedan — formulera **inte** om användarens prosa.
+2. **Transkriberar texten troget** till ren Markdown och lägger på frontmatter (docs: `title`, `description`; blogg: `title`, `date`, `authors: tobias`, `tags`, `excerpt`). Rena språkfel rättar du på vägen (rapportera dem); större omskrivningar gör du **inte** — se regeln nedan.
 3. **Bilder:** Docs-exporten bäddar in bilder som base64 i markdownen. Extrahera dem till `src/assets/<sida>-N.png` och referera med relativ sökväg (`![alt](../../assets/…)`) — Astro optimerar till WebP.
    - **Inline-ritningar (`Infoga → Teckning`) — hämtas via PDF-exporten.** Dessa följer *inte* med markdown- eller HTML-exporten (HTML ger bara en autentiserad `docs.google.com/drawings/d/…/image?parent=`-länk som svarar 401 utan webbläsarinloggning, och Docs-API:t `gws docs documents get` returnerar dem med `embeddedDrawingProperties` men **tomt `contentUri`**). Men **PDF-exporten rastrerar dem**: `gws drive files export --params '{"fileId":"…","mimeType":"application/pdf"}' -o <temp>.pdf`. Extrahera sedan med PyMuPDF (`pip install PyMuPDF`) — och **rendera sid-ytan**, extrahera inte rå-bilden direkt (rå-bilden har en separat transparensmask → svart bakgrund). Mönster:
      ```python
@@ -117,18 +117,20 @@ Det normala sättet att lägga upp innehåll: användaren skriver i **Google Doc
 5. Rensa ren formatbrus (escape-artefakter som `\-`, `1\.`, trasiga listmarkörer), placera filen, uppdatera `sidebar` vid behov.
 6. Kör `npm run build`, verifiera, och tala om för användaren exakt vad som ska `git add`/committas. **Pusha inte själv.**
 
-> **Skriv inte om användarens text.** När innehåll överförs från källformat (Google Docs m.m.) till Markdown ska användarens egna formuleringar bevaras — transkribera, formulera inte om. Det enda som får ändras tyst är *format* (Markdown-struktur, escape-brus, återställd matematik/tabeller, bildreferenser).
+> **Mindre språkfel — rätta direkt och rapportera.** Rena språkfel (stavning, grammatik, interpunktion) och formatbrus rättar du i den publicerade Markdownen vid transkriptionen, och **rapporterar** kort vad du ändrat (i chatten). Du behöver inte vänta in användaren för sådant.
 >
-> **Ge i stället feedback.** Språkfel (stavning, grammatik) och **logiska fel eller luckor i resonemangen** ska du *rapportera separat* till användaren (i chatten, inte genom att redigera texten), så att hen själv kan avgöra och rätta i källan. Rätta alltså inte genom att skriva om — peka ut.
+> **Större ändringar — skriv inte om, peka ut och vänta.** Omformuleringar av prosa, omstrukturering, **logiska fel eller luckor i resonemangen** samt tekniska fakta ska du *inte* ändra på egen hand. Rapportera dem separat (i chatten) så att användaren själv avgör och rättar i källan (Google-dokumentet) — där vill hen vara med i loopen. Vid tveksamhet om en ändring är "mindre" eller "större": behandla den som större.
+>
+> **Källan vs sajten.** Format (Markdown-struktur, escape-brus, återställd matematik/tabeller, bildreferenser) ändras alltid tyst. Mindre språkfixar hamnar i Markdownen men inte i Google-dokumentet, så de rapporteras alltid — spegla dem i dokumentet vid tillfälle om du vill hålla källan helt i synk. Substantiellt innehåll går alltid via dokumentet.
 
 ### Slash-kommandon: `/validate-doc` och `/export-doc`
 
 Arbetsflödet ovan är operationaliserat i två kommandon (`.claude/commands/`) med en **quality tollgate** emellan, byggd kring en delad logik i `scripts/exportdoc.py`:
 
-- **`/validate-doc <namn|ID>`** — granskar dokumentet och rapporterar språk-/logikfynd + inventerar formler/ritningar (rättar inget). Är källan ren och användaren signerar av: registrerar ett **godkännande** och skriver en synlig stämpel `Document version N · <tid>` längst ner i Google-dokumentet (via `gws docs … batchUpdate`).
+- **`/validate-doc <namn|ID>`** — granskar dokumentet, rapporterar fynd och inventerar formler/ritningar (rättar inget här — det är grinden). Mindre språkfel blockerar inte godkännandet (de rättas automatiskt vid export och rapporteras då); större fynd (omskrivning, logik, tekniska fakta) ska fixas i dokumentet först. Är källan ren (eller bara mindre språknoteringar kvar) och användaren signerar av: registrerar ett **godkännande** och skriver en synlig stämpel `Document version N · <tid>` längst ner i Google-dokumentet (via `gws docs … batchUpdate`).
 - **`/export-doc <namn|ID> [page|blog] [sektion]`** — verifierar godkännandet och publicerar (hela transkriptions-pipelinen ovan). **Vägrar** om dokumentet inte är godkänt eller har ändrats sedan godkännandet.
 
-**Grinden = en checksumma.** `export-state.json` (i projektroten, versionshanterad → audit trail) håller per dokument: `checksum`, `version`, `approvedAt`, `approved`. Checksumman räknas över brödtexten med stämpel-raden borträknad, så stämpeln självinvaliderar aldrig godkännandet. Både validate och export räknar om checksumman; matchar den inte den godkända → `approved` **clearas** automatiskt och export vägrar tills `/validate-doc` körts om. Eftersom fixar görs i Google-dokumentet (aldrig i markdownen) hålls källa och sajt i synk.
+**Grinden = en checksumma.** `export-state.json` (i projektroten, versionshanterad → audit trail) håller per dokument: `checksum`, `version`, `approvedAt`, `approved`. Checksumman räknas över brödtexten med stämpel-raden borträknad, så stämpeln självinvaliderar aldrig godkännandet. Både validate och export räknar om checksumman; matchar den inte den godkända → `approved` **clearas** automatiskt och export vägrar tills `/validate-doc` körts om. Substantiella fixar görs i Google-dokumentet (aldrig i markdownen) så att den auktoritativa källan hålls i synk; mindre språkfixar som görs vid export rapporteras i stället (och kan speglas till dokumentet vid tillfälle).
 
 > **Utvärderat och förkastat:** att lägga granskningsfynden som **Google Docs-kommentarer** (via `drive.comments.create`). API:t accepterar dem men native Docs ankrar dem inte — de hamnar löst i marginalen med "Originalinnehållet har raderats". Feedback ges därför i chatten, inte som doc-kommentarer.
 
@@ -138,7 +140,7 @@ Temp-/exportfiler (`_export*.md` o.d.) ska *inte* committas — ta bort dem efte
 
 - **Språk:** engelska genomgående på sajten, korrekt och naturlig prosa.
 - **Publik, lagom nivå** — sajten riktar sig till tekniskt intresserade läsare, inte bara projektägaren. Förklara förkortningar (FOC, PMSM, BMS …) första gången de används.
-- **Bevara användarens text** — när färdig text överförs från Google Docs ska den transkriberas troget, inte skrivas om (se *Arbetsflöde* ovan). Språk-/logikfel rapporteras som feedback, inte genom omskrivning. Endast genuint fragmentariska stödanteckningar får struktureras — och flagga då vad du gjort.
+- **Bevara användarens text** — transkribera troget (se *Arbetsflöde* ovan). **Mindre språkfel** (stavning, grammatik, interpunktion) rättar du direkt och **rapporterar**; **större ändringar** (omformulering, omstrukturering, logik-/resonemangsfel, tekniska fakta) skriver du *inte* om — peka ut dem så att användaren rättar i källan (vid tveksamhet: behandla som större). Endast genuint fragmentariska stödanteckningar får struktureras — flagga då vad du gjort.
 - **Bilder** läggs i `src/assets/` (optimeras av Astro, importeras i MDX via `astro:assets`) och hämtas från Drive-mappen `bilder/` vid behov.
 - **Tillgänglighet & prestanda:** semantisk HTML, alt-texter, vettiga kontraster. Starlight ger en bra baslinje — bryt den inte i onödan.
 - **Ingen client-side JS** om det inte behövs — håll det statiskt.
