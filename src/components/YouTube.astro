@@ -1,0 +1,99 @@
+---
+/**
+ * Lättviktig YouTube-inbäddning (facade): visar bara en tumnagel tills man
+ * klickar — då laddas själva spelaren. Ingen YouTube-JS eller iframe körs
+ * förrän användaren trycker play. Inget externt beroende.
+ *
+ * Användning (i .mdx):  <YouTube id="VIDEO_ID" title="Beskrivning" />
+ */
+interface Props {
+  id: string;
+  title?: string;
+}
+const { id, title = 'YouTube video' } = Astro.props;
+const thumb = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+---
+
+<div class="yt-facade" data-id={id} data-title={title}>
+  <button type="button" class="yt-play" aria-label={`Play: ${title}`}>
+    <img src={thumb} alt="" loading="lazy" decoding="async" class="yt-thumb" />
+    <svg class="yt-icon" viewBox="0 0 68 48" width="68" height="48" aria-hidden="true">
+      <path
+        d="M66.52 7.74a8 8 0 0 0-5.6-5.66C56.07.5 34 .5 34 .5s-22.07 0-26.92 1.58a8 8 0 0 0-5.6 5.66A83 83 0 0 0 .5 24a83 83 0 0 0 1 16.26 8 8 0 0 0 5.6 5.66C11.93 47.5 34 47.5 34 47.5s22.07 0 26.92-1.58a8 8 0 0 0 5.6-5.66A83 83 0 0 0 67.5 24a83 83 0 0 0-.98-16.26z"
+        fill="#f00"></path>
+      <path d="M27 34l18-10-18-10z" fill="#fff"></path>
+    </svg>
+  </button>
+</div>
+
+<style>
+  .yt-facade {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: #000;
+  }
+  .yt-play {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .yt-thumb {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .yt-icon {
+    position: relative;
+    z-index: 1;
+    opacity: 0.9;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .yt-play:hover .yt-icon,
+  .yt-play:focus-visible .yt-icon {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  .yt-facade iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>
+
+<script>
+  function initYouTubeFacades() {
+    document.querySelectorAll<HTMLElement>('.yt-facade:not([data-init])').forEach((el) => {
+      el.setAttribute('data-init', '');
+      el.querySelector('.yt-play')?.addEventListener('click', () => {
+        const id = el.dataset.id;
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+        iframe.title = el.dataset.title || 'YouTube video';
+        iframe.allow =
+          'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        // Sätt storleken inline: iframen skapas i runtime och får inte Astros
+        // scope-attribut, så de scopade .yt-facade iframe-reglerna matchar den inte.
+        iframe.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; border:0;';
+        el.replaceChildren(iframe);
+      });
+    });
+  }
+  initYouTubeFacades();
+  document.addEventListener('astro:page-load', initYouTubeFacades);
+</script>

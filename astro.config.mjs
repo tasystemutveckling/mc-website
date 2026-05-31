@@ -50,6 +50,7 @@ export default defineConfig({
 							items: [
 								{ label: 'Overview', slug: 'inverter/overview' },
 								{ label: 'Design', slug: 'inverter/design' },
+								{ label: 'POC', slug: 'inverter/poc' },
 							],
 						},
 						{ label: 'Motor', slug: 'motor/overview' },

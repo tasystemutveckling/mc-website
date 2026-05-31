@@ -2,9 +2,16 @@
   "documents": {
     "1nqqBJSr2LS7shcvEbFkanWVhuyFb5uop6gm_q-f1OXc": {
       "name": "Inverter",
-      "checksum": "sha256:752183501fc96d956b4eaefa8ba3d16c050f3fb5f9915a3e3593db079de8377a",
+      "checksum": "sha256:4745acdb5551f1de2048794aac277c5c32adcf1e219f864f9717d6e3f0321306",
+      "version": 2,
+      "approvedAt": "2026-05-31 16:41",
+      "approved": true
+    },
+    "1lnhqsDzG6eLBwPYnn2UHqFewe6t_N6F5EoiQ51LQguI": {
+      "name": "inverter poc",
+      "checksum": "sha256:4125a848ccabb42a14c780835d8670e7ed8edb54f6616137ac78b47b0be2499a",
       "version": 1,
-      "approvedAt": "2026-05-30 18:01",
+      "approvedAt": "2026-05-31 16:08",
       "approved": true
     }
   }
